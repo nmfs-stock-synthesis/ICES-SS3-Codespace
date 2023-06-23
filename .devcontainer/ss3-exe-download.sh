@@ -8,4 +8,5 @@ sudo mv user-examples-main/model_files model_files
 sudo chmod 777 model_files
 sudo rm -r -f user-examples-main
 sudo rm -r -f main.zip
-find model_files/* -type d -exec cp ss {} \;
+sudo find model_files -type d -exec cp ss {} \;
+sudo rm -r -f model_files/ss
