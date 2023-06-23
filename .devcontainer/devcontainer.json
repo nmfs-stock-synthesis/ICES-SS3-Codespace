@@ -18,7 +18,8 @@
 	  		"extensions":[
 				"GitHub.codespaces",
 				"hbenl.vscode-test-explorer",
-				"reditorsupport.r","rdebugger.r-debugger",
+				"reditorsupport.r",
+				"rdebugger.r-debugger",
 				"ms-vsliveshare.vsliveshare",
 				"mathematic.vscode-pdf"
 			]
