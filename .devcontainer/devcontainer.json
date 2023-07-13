@@ -11,8 +11,9 @@
 			"installSystemRequirements": true
 		}
 	},
-        "postCreateCommand": "bash .devcontainer/ss3-exe-download.sh",
   	
+	"postCreateCommand": "echo 'options(repos = c(CRAN = \"https://cloud.r-project.org\"))' | sudo sh -c 'cat - >>\"${R_HOME}/etc/Rprofile.site\"'",
+		
 	"customizations": {
 	  "vscode": {
 	  		"extensions":[
