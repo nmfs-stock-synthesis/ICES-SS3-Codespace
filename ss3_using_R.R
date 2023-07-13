@@ -1,4 +1,5 @@
 library(r4ss)
+# Link to intro to r4ss vignette here: https://r4ss.github.io/r4ss/articles/r4ss-intro-vignette.html
 
 # Get info about your working directory
 getwd()
