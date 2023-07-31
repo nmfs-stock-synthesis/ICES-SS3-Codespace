@@ -7,7 +7,7 @@
                         "packages": "make,gcc,g++,cmake,clang-tidy,clang-format"
 		},
 	    	 "ghcr.io/rocker-org/devcontainer-features/r-packages:1": {
-			"packages": "cli,rlang,github::r4ss/r4ss,github::ss3sim/ss3sim,github::jabbamodel/ss3diags,ggplot2,plyr,knitr,reshape2,dplyr,scales,covr,png,grid,kobe,mvtnorm,github::flr/ggplotFL,github::flr/FLCore,utf8",
+			"packages": "cli,rlang,github::r4ss/r4ss,github::ss3sim/ss3sim,github::jabbamodel/ss3diags,ggplot2,plyr,knitr,reshape2,dplyr,scales,covr,png,grid,kobe,utf8",
 			"installSystemRequirements": true
 		}
 	},
