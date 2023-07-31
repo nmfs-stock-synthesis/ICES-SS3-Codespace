@@ -1,0 +1,431 @@
+---
+title: "Diagnostics and Sensitivity of Stock Synthesis"
+
+author: 
+ - Max Cardinale (SLU) 
+ - Henning Winker (GFCM)
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output:
+  pdf_document:
+    number_sections: yes
+    #toc: yes
+    #keep_tex: false
+vignette: >
+  %\VignetteIndexEntry{ss3daigs Vignetted}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r wrap-hook, echo = FALSE}
+library(knitr)
+hook_output = knit_hooks$get('output')
+knit_hooks$set(output = function(x, options) {
+  # this hook is used only when the linewidth option is not NULL
+  if (!is.null(n <- options$linewidth)) {
+    x = knitr:::split_lines(x)
+    # any lines wider than n should be wrapped
+    if (any(nchar(x) > n)) x = strwrap(x, width = n)
+    x = paste(x, collapse = '\n')
+  }
+  hook_output(x, options)
+})
+```
+
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "  " ,fig.align = 'center', cache=FALSE,tidy.opts=list(width.cutoff=80), tidy=TRUE)
+
+```
+
+## Load packages
+
+```{r, message=FALSE}
+# Load
+library(r4ss)
+library(ss3diags)
+library(mvtnorm)
+library(FLCore)
+library(ggplotFL)
+library(kobe)
+require(plyr)
+require(dplyr)
+require(reshape2)
+library(grid)
+library(png)
+
+```
+
+# Central Baltic herring ensemble 
+
+All models are annual, one sex, one fleet and with one acoustic survey
+
+The $B_{MSY}$ proxy is set to 35\%$SSB_0$ with a corresponding $F_{SB35}$
+
++ *Run1* reference run, average M
++ *Run2* Low M
++ *Run3* High M
++ *Run4* High M (placeholder for testing) 
+
+```{r}
+
+scenarios = c("Run1","Run2","Run3","Run4") 
+
+```
+
+## Load runs
+
+Define folder with R data files
+
+```{r}
+rdata = "rdata_runs"
+runs = list.files(rdata)
+```
+
+Get list of rdata files
+
+```{r}
+mods = list()
+for(i in 1:length(runs)){
+  load(file.path(rdata,runs[i]))
+  mods[[i]] = ss3rep
+}
+mods= mods[c(1,3,2,4)]
+names(mods) = scenarios
+```
+
+# Selected Model Diagnostics
+
+More computational intense model diagnostic were run for 3 selected runs:
+
++ *Run1* reference run, average M
++ *Run2* Low M
++ *Run3* High M
++ *Run4* High M (placeholder for testing) 
+
+Select the runs used for diagnostics
+
+```{r}
+dm = mods[c(1,2,3,4)]
+
+```
+
+Load retro data
+
+```{r}
+rdata = "rdata_retros"
+runs = list.files(rdata)
+retros = list()
+for(i in 1:length(runs)){
+  load(file.path(rdata,runs[i]))
+  retros[[i]] = retroModels
+}
+
+hcs = retros[c(1,2,3,4)]
+names(hcs) = names(dm)
+```
+
+Make list of hindcast trends form retrospective runs
+
+```{r}
+
+hc = lapply(hcs,function(x){
+  hci = r4ss::SSsummarize(x,verbose=F)
+  hci
+  })
+
+```
+
+Compile length comps from retrospective runs
+
+
+```{r}
+
+hc.age = lapply(hcs,function(x){
+  hcl = ss3diags::SSretroComps(x)
+  hcl
+  })
+
+
+```
+
+## Goodness of Fits
+
+### Indices
+
+```{r fit1, fig.height=8,fig.width=10, fig.cap = paste0("Index residual plots for the acoustic survey index with trends indicating the trends for four scenarios")}
+sspar(mfrow=c(2,2),plot.cex = 0.9)
+SSplotJABBAres(dm[[1]],add=T,verbose = F)
+legend("topleft","Run1",cex=1.3)
+SSplotJABBAres(dm[[2]],add=T,verbose = F)
+legend("topleft","Run2",cex=1.3)
+SSplotJABBAres(dm[[3]],add=T,verbose = F)
+legend("topleft","Run3",cex=1.3)
+SSplotJABBAres(dm[[4]],add=T,verbose = F)
+legend("topleft","Run4",cex=1.3)
+
+```
+
+```{r fit2, fig.height=8,fig.width=10, fig.cap = paste0("Index residual runs tests for the acoustic survey index with trends indicating the trends for four scenarios")}
+sspar(mfrow=c(2,2),plot.cex = 0.9)
+SSplotRunstest(dm[[1]],add=T,verbose = F)
+legend("topleft","Run1",cex=1.3)
+SSplotRunstest(dm[[2]],add=T,verbose = F)
+legend("topleft","Run2",cex=1.3)
+SSplotRunstest(dm[[3]],add=T,verbose = F)
+legend("topleft","Run3",cex=1.3)
+SSplotRunstest(dm[[4]],add=T,verbose = F)
+legend("topleft","Run4",cex=1.2)
+
+
+```
+
+\newpage
+
+### Size Composition Data
+
+```{r fit3, fig.height=8,fig.width=10, fig.cap = paste0("Index residual plots for the mean age with trends indicating the trends for four scenarios")}
+sspar(mfrow=c(2,2),plot.cex = 0.9)
+SSplotJABBAres(dm[[1]],add=T,subplots = "age",verbose = F)
+legend("topleft","Run1",cex=1.3)
+SSplotJABBAres(dm[[2]],add=T,subplots = "age",verbose = F)
+legend("topleft","Run2",cex=1.3)
+SSplotJABBAres(dm[[3]],add=T,subplots = "age",verbose = F)
+legend("topleft","Run3",cex=1.3)
+SSplotJABBAres(dm[[4]],add=T,subplots = "age",verbose = F)
+legend("topleft","Run4",cex=1.3)
+
+```
+
+\newpage
+
+### Run1
+
+```{r len1, fig.height=8,fig.width=10, fig.cap = paste0("Residual runs tests on mean lengths for the Run1")}
+i=1
+sspar(mfrow=c(2,2),plot.cex = 0.65)
+SSplotRunstest(dm[[i]],add=T,subplots="age",verbose=F)
+
+```
+
+\newpage
+
+### Run2
+
+```{r len2, fig.height=8,fig.width=10, fig.cap = paste0("Residual runs tests on mean age for the Run2")}
+# Retro
+i=2
+sspar(mfrow=c(2,2),plot.cex = 0.65)
+SSplotRunstest(dm[[i]],add=T,subplots="age",verbose=F)
+
+```
+
+\newpage
+
+### Run3
+
+```{r len3, fig.height=8,fig.width=10, fig.cap = paste0("Residual runs tests on mean age for the Run3")}
+
+i=3
+sspar(mfrow=c(2,2),plot.cex = 0.65)
+SSplotRunstest(dm[[i]],add=T,subplots="age",verbose=F)
+
+```
+
+\newpage
+
+### Run4
+
+```{r len4, fig.height=8,fig.width=10, fig.cap = paste0("Residual runs tests on mean age for the Run4")}
+i=4
+sspar(mfrow=c(2,2),plot.cex = 0.65)
+SSplotRunstest(dm[[i]],add=T,subplots="age",verbose=F)
+
+```
+
+\newpage
+
+## Retrospective Analysis
+
+### Run1
+
+```{r ret1, fig.height=8,fig.width=10, fig.cap = paste0("Retrospective analysis and retrospective forecasts for the Run1")}
+# Retro
+i = 1
+sspar(mfrow=c(2,2),plot.cex = 0.65)
+SSplotRetro(hc[[i]],add=T,legend=F,forecast=F,verbose = F)
+SSplotRetro(hc[[i]],add=T,forecastrho = T,legend=F,verbose = F)
+SSplotRetro(hc[[i]],subplots = "F",add=T,legend=F,forecast=F,
+            verbose = F)
+SSplotRetro(hc[[i]],subplots = "F",add=T,forecastrho = T,legend=F,
+            verbose = F)
+mtext(c("Retro","Forecast"),3,outer=T,line=-0.5,at=c(0.3,0.8),cex=0.8)
+
+```
+
+
+\newpage
+
+### Run2 
+
+```{r ret2, fig.height=8,fig.width=10, fig.cap = paste0("Retrospective analysis and retrospective forecasts for the Run2")}
+# Retro
+i = 2
+sspar(mfrow=c(2,2),plot.cex = 0.65)
+SSplotRetro(hc[[i]],add=T,legend=F,forecast=F,verbose = F)
+SSplotRetro(hc[[i]],add=T,forecastrho = T,legend=F,verbose = F)
+SSplotRetro(hc[[i]],subplots = "F",add=T,legend=F,
+            forecast=F,verbose = F)
+SSplotRetro(hc[[i]],subplots = "F",add=T,
+            forecastrho = T,legend=F,verbose = F)
+mtext(c("Retro","Forecast"),3,outer=T,line=-0.5,at=c(0.3,0.8),cex=0.8)
+
+```
+
+
+\newpage
+
+### Run3
+
+
+```{r ret3, fig.height=8,fig.width=10, fig.cap = paste0("Retrospective analysis and retrospective forecasts for the Run3")}
+# Retro
+i = 3
+sspar(mfrow=c(2,2),plot.cex = 0.65)
+SSplotRetro(hc[[i]],add=T,legend=F,forecast=F)
+SSplotRetro(hc[[i]],add=T,forecastrho = T,legend=F)
+SSplotRetro(hc[[i]],subplots = "F",add=T,legend=F,forecast=F)
+SSplotRetro(hc[[i]],subplots = "F",add=T,forecastrho = T,legend=F)
+mtext(c("Retro","Forecast"),3,outer=T,line=-0.5,at=c(0.3,0.8),cex=0.8)
+
+```
+
+\newpage
+
+### Run4
+
+```{r ret4, fig.height=8,fig.width=10, fig.cap = paste0("Retrospective analysis and retrospective forecasts for the Run4")}
+# Retro
+i = 4
+sspar(mfrow=c(2,2),plot.cex = 0.65)
+SSplotRetro(hc[[i]],add=T,legend=F,forecast=F)
+SSplotRetro(hc[[i]],add=T,forecastrho = T,legend=F)
+SSplotRetro(hc[[i]],subplots = "F",add=T,legend=F,forecast=F)
+SSplotRetro(hc[[i]],subplots = "F",add=T,forecastrho = T,legend=F)
+mtext(c("Retro","Forecast"),3,outer=T,line=-0.5,at=c(0.3,0.8),cex=0.8)
+
+```
+
+
+\newpage
+
+## Hindcasting Cross-Validation
+
+### Indices
+
+```{r hc1, fig.height=8,fig.width=10, fig.cap = paste0("Hindcast cross-validations for the acoustic survey Indices")}
+sspar(mfrow=c(2,2),plot.cex = 0.9)
+SSplotHCxval(hc[[1]],add=T,verbose = FALSE)
+legend("topleft","Ref",cex=1.3)
+SSplotHCxval(hc[[2]],add=T,verbose = FALSE)
+legend("topleft","MK",cex=1.3)
+SSplotHCxval(hc[[3]],add=T,verbose = FALSE)
+legend("topleft","MK.FL",cex=1.3)
+SSplotHCxval(hc[[4]],add=T,verbose = FALSE)
+legend("topleft","MK.lh",cex=1.2)
+
+
+```
+
+\newpage
+
+
+# Sensitivities
+
+
+
+Get the labels for the Bratio and Fratio
+
+```{r}
+mvn=SSdeltaMVLN(mods[[3]],Fref="Btgt",mc=2,plot=F)
+mvn$labels
+```
+Create uncertainty with delta-MVLN approximation 
+
+```{r}
+kbs = NULL
+# Compare indices
+for(i in 1:length(scenarios)){
+  kbs = rbind(kbs,SSdeltaMVLN(mods[[i]],
+          run=scenarios[i],Fref="Btgt",
+          plot=F,verbose = F,years=1903:2020)$kb)
+}
+```
+
+
+```{r fig1, fig.height=9,fig.width=8, fig.cap = paste0("Comparison of stock trajectories")}
+
+sspar(mfrow=c(3,2),plot.cex = 0.7)
+SSplotEnsemble(kbs,
+               uncertainty =F,
+               add=T,ylabs=mvn$labels,
+               legendcex = 0.65,
+               legendloc = "topright",verbose = F)
+
+```
+
+
+```{r fig2, fig.height=9,fig.width=8, fig.cap = paste0("Comparison of stock trajectories with 95\\% CIs")}
+
+sspar(mfrow=c(3,2),plot.cex = 0.7)
+SSplotEnsemble(kbs,
+               uncertainty =T,
+               add=T,ylabs=mvn$labels,
+               legendcex = 0.65,
+               legendloc = "topright",verbose = F)
+
+```
+
+```{r,warning=F}
+get_plot = "Compare.png"
+
+# By run
+Par = list(mfrow=c(1,1),mar = c(5, 5, 1, 1), mgp =c(3,1,0), tck = -0.02,cex=0.8)
+png(file = get_plot, width = 6.5, height = 5.5, 
+    res = 200, units = "in")
+par(Par)
+kbp = kobe:::kobePhaseMar2(
+  transform(kbs[kbs$year==2020,],
+  run=paste(run))[,c("stock","harvest","run")],
+  xlab = expression(B/B[tgt]),
+  ylab =expression(F/F[tgt]),
+  ylim =5,xlim=3,col=rainbow(7)[3:7],
+  quadcol=c("red","green","yellow","orange"))
+
+dev.off()
+```
+
+```{r fig3, fig.height=7,fig.width=8, fig.cap = paste0("Kobe plot showing the comparison of stock status posteriors for 2020 with marginal posterior distributions")}
+
+
+# Beautify
+DIMs=c(6,5.5)
+# setup plot
+par(mar=rep(0,4),omi= c(0, 0, 0, 0)) # no margins
+
+# layout the plots into a matrix w/ 12 columns, by row
+layout(matrix(1:1, ncol=1, byrow=TRUE))
+
+# example image
+img <- readPNG(paste0(get_plot))
+
+# do the plotting
+plot(NA,xlim=0:1,ylim=0:1,
+     xaxt="n",yaxt="n",bty="n")
+
+rasterImage(img,0,0,1,1)
+legend("topright",scenarios,pch=22, pt.bg=rainbow(7)[3:7],box.lty = 0, cex=1.2)
+
+```
+
+\newpage
+
