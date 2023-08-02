@@ -10,7 +10,7 @@ However, if you can't download R and RStudio or VSCode (both are IDEs to work wi
 | -----| ----- |
 | herring-simple |  |
 | herring-just-2019-as-equlibirum |  |
-| herring-scaa |  |
+| herring-scaa |This example demonstrates SS3 configured to be similar to the approach used by SAM. It has so length data and gets body weight as empirical input from wtatage.ss|
 | herring-scaa-2dar |  |
 | herring-scaa-2dar-noTV |  |
 | herring-aspm |  |
