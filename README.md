@@ -8,9 +8,9 @@ However, if you can't download R and RStudio or VSCode (both are IDEs to work wi
 
 | Model Name | Model Description |
 | -----| ----- |
-| herring-simple |  |
-| herring-just-2019-as-equlibirum |  |
-| herring-scaa |This example demonstrates SS3 configured to be similar to the approach used by SAM. It has so length data and gets body weight as empirical input from wtatage.ss|
-| herring-scaa-2dar |  |
-| herring-scaa-2dar-noTV |  |
-| herring-aspm |  |
+| herring-simple |This example demonstrates SS3 configured to be similar to the approach used by SAM. It has so length data and gets body weight as empirical input from wtatage.ss  |
+| herring-just-2019-as-equlibirum |This example demonstrates SS3 ability to operate with just one year of data.  Here the model is estimating F for that year using the composition data.  |
+| herring-scaa |this is same as herring-simple, let's delete after comparing content|
+| herring-scaa-2dar |This example shows the new approach to selectivity: Two Dimensional Autoregressive (2DAR).  Deviations are estimated for each age and each year within a defined range.  |
+| herring-scaa-2dar-noTV |This example shows a new approach to age-selectivity.  Base selectivity is a flat line and age-specific deviations are estimated.  NoTV means that deviations are only in age and not in time (years)  |
+| herring-aspm |This example shows SS3 doing Age-Structured Production Model.  The compsition data are ignored and recruitments are not estimated.  Here the model is trying to estimate the trend in CPUE caused only by the catch.  |
