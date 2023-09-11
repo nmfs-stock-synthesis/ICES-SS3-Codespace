@@ -8,9 +8,9 @@ However, if you can't download R and RStudio or VSCode (both are IDEs to work wi
 
 | Model Name | Model Description |
 | -----| ----- |
-| herring-scaa (simple) | This example demonstrates SS3 configured to be similar to the approach used by SAM. It has so length data and gets body weight as empirical input from wtatage.ss. |
+| herring-scaa (simple) | This example demonstrates SS3 configured to be similar to the approach used by SAM. It has no length data and gets body weight as empirical input from wtatage.ss. |
 | herring-just-2019-as-equlibirum | This example demonstrates SS3 ability to operate with just one year of data. Here the model is estimating F for that year using the composition data. |
-| herring-scaa-2dar | This example shows the new approach to selectivity: [Two Dimensional Autoregressive (2DAR)](https://nmfs-stock-synthesis.github.io/doc/SS330_User_Manual_release.html#two-dimensional-auto-regressive-selectivity-semi-parametric-selectivity). Deviations are estimated for each age and each year within a defined range. |
-| herring-scaa-2dar-noTV | This example shows a new approach to age-selectivity. Base selectivity is a flat line and age-specific deviations are estimated. "noTV" means that deviations are only in age and not in time (years). |
-| herring-aspm | This example shows SS3 doing Age-Structured Production Model. The compsition data are ignored and recruitments are not estimated. Here the model is trying to estimate the trend in CPUE caused only by the catch. |
+| herring-scaa-2dar-noTV | This shows a highly flexible approach to selectivity: [Two Dimensional Autoregressive (2DAR)](https://nmfs-stock-synthesis.github.io/doc/SS330_User_Manual_release.html#two-dimensional-auto-regressive-selectivity-semi-parametric-selectivity). Base selectivity is a flat line and age-specific deviations are estimated. "noTV" means that deviations are only in age and not in time (years). |
+| herring-scaa-2dar | This example uses 2DAR with deviations for each age and each year within a defined range. |
+| herring-aspm | This example shows SS3 doing Age-Structured Production Model. The composition data are ignored and recruitments are not estimated. Here the model is trying to estimate the trend in CPUE caused only by the catch. |
 | predators | This example demonstrates SS3 ability to model the overall natural mortality (M) to include explicit mortality caused by major predators (M2) |
