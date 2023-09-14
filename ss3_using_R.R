@@ -22,7 +22,19 @@ dir("herring-just-2019-as-equilibrium")
 # Run the model, despite already having a Report.sso file in there
 # (that is why we set skipfinished = FALSE)
 r4ss::run(
-  dir = "herring-just_2019-as-equilibrium",
-  exe = "ss3",
-  skipfinished = FALSE
+  dir = "herring-just-2019-as-equilibrium",
+  exe = "ss3.exe",
+  skipfinished = FALSE, # TRUE will skip running if Report.sso present
+  show_in_console = FALSE # change to true to watch the output go past
 )
+
+# run the herring-scaa model
+r4ss::run(
+  dir = "herring-scaa",
+  exe = "ss3.exe",
+  skipfinished = FALSE, # TRUE will skip running if Report.sso present
+  show_in_console = FALSE # change to true to watch the output go past
+)
+
+herring_scaa <- SS_output("herring-scaa")
+SS_plots(herring_scaa)
