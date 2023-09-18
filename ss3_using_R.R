@@ -1,6 +1,7 @@
 # optionally clone the repository with example models into the working directory
-system("git clone https://github.com/nmfs-stock-synthesis/ICES-course-2023.git ICES-course-2023")
-setwd("ICES-course-2023")
+# system("git clone https://github.com/nmfs-stock-synthesis/ICES-course-2023.git ICES-course-2023")
+getwd() # Find out which directory you are in
+setwd("ICES-course-2023") # If you have cloned/downloaded this from GitHub, you should already be in this directory
 # install r4ss if not already present
 remotes::install_github("r4ss/r4ss")
 
@@ -23,7 +24,18 @@ dir("herring-just-2019-as-equilibrium")
 # (that is why we set skipfinished = FALSE)
 r4ss::run(
   dir = "herring-just-2019-as-equilibrium",
-  exe = "ss3.exe",
+  exe = "ss3",
+  skipfinished = FALSE, # TRUE will skip running if Report.sso present
+  show_in_console = FALSE # change to true to watch the output go past
+)
+
+# Run the model using the file path of the ss3 exe
+# You can also use file paths to direct to ss3 in case it is downloaded somewhere else not in your
+# working directory. In that case just copy the file path of where the ss3 exe is located.
+# Here I am just using the getwd() to get the file path of where our ss3 is downloaded in this example.
+r4ss::run(
+  dir = "herring-just-2019-as-equilibrium",
+  exe = file.path(getwd(), "ss3"),
   skipfinished = FALSE, # TRUE will skip running if Report.sso present
   show_in_console = FALSE # change to true to watch the output go past
 )
@@ -31,7 +43,7 @@ r4ss::run(
 # run the herring-scaa model
 r4ss::run(
   dir = "herring-scaa",
-  exe = "ss3.exe",
+  exe = "ss3",
   skipfinished = FALSE, # TRUE will skip running if Report.sso present
   show_in_console = FALSE # change to true to watch the output go past
 )
