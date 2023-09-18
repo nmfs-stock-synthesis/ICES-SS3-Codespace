@@ -1,4 +1,7 @@
 # ICES Course
+Slido questions link: \
+slido.com \
+#1988302
 
 This repository contains model files and associated material for the 2023 ICES course on Stock Synthesis held in Copenhagen, Denmark. 
 
