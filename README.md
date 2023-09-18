@@ -1,7 +1,11 @@
 # ICES Course
-Slido questions link: \
+Slido questions link and QR code (can use either): 
+
 slido.com \
-#1988302
+#1988302 
+
+![QR Code for Questions (1)](https://github.com/nmfs-stock-synthesis/ICES-course-2023/assets/118312785/6ac277c9-179f-4387-97e3-74f81fe8c996)
+
 
 This repository contains model files and associated material for the 2023 ICES course on Stock Synthesis held in Copenhagen, Denmark. 
 
