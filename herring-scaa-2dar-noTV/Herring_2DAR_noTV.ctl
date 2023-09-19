@@ -250,7 +250,7 @@
  2 1981 1981 1 5 1 0 2 2 1 1  #  2d_AR specs for fleet: Acoustics AGE
  0.5 3 2 0 -1 0.01 -2  # sigma_sel for fleet:_2; AGE_1
  3 1981 1981 3 4 1 0 2 2 1 1  #  2d_AR specs for fleet: Trapnet AGE
-
+ 0.5 3 2 0 -1 0.01 -2  # sigma_sel for fleet:_2; AGE_1
 -9999       1981  1981  1     8       1           0     2    2          1      1
 #_no 2D_AR1 selex offset used
 
