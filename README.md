@@ -1,4 +1,4 @@
-# SS3 Training
+# SS3 Trainings
 This repository contains model files and associated materials for SS3 trainings. The sections below detail the trainings that have utilized these materials is below.
 
 ## ICES Course on SS3, Copenhagen, September 2023
