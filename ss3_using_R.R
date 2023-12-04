@@ -1,7 +1,7 @@
 # optionally clone the repository with example models into the working directory
-# system("git clone https://github.com/nmfs-stock-synthesis/ICES-course-2023.git ICES-course-2023")
+# system("git clone https://github.com/nmfs-ost/ss3-trainings.git ss3-trainings")
 getwd() # Find out which directory you are in
-setwd("ICES-course-2023") # If you have cloned/downloaded this from GitHub, you should already be in this directory
+setwd("ss3-trainings") # If you have cloned/downloaded this from GitHub, you should already be in this directory
 # install r4ss if not already present
 remotes::install_github("r4ss/r4ss")
 
